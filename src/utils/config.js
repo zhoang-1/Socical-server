@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+const MONGO_URL = process.env.MONGODB_URL || '';
 const PORT = process.env.PORT || 8080;
 
 const configViewEngine = (app) => {
@@ -11,4 +12,4 @@ const configViewEngine = (app) => {
   app.set("views", "./src/views");
 };
 
-module.exports = {configViewEngine, PORT};
+module.exports = {MONGO_URL,PORT,configViewEngine };
