@@ -10,17 +10,17 @@ const userProfileSchema = mongoose.Schema(
             type: String,
             required: true,
         },
-        email_address:{
+        email:{
             type: String,
             required: true,
+        },
+        password: {
+            type: String,
         },
         phone: {
             type: String,
             required: false,
             default: '',
-        },
-        password: {
-            type: String,
         },
         address: {
             type: Object,
@@ -49,19 +49,19 @@ const userProfileSchema = mongoose.Schema(
             required: true,
         },
         num_post: {
-            type: INTEGER,
+            type: Number,
             required: true,
         },
         num_follow:{
-            type: String,
+            type: Number,
             required: true,
         },
         num_like: {
-            type: String,
+            type: Number,
             required: true,
         },
         friend_array: {
-            type: String,
+            type: Array,
             required: true,
         },
         is_friend:{
@@ -82,4 +82,4 @@ const userProfileSchema = mongoose.Schema(
     },
     { timestamps: true }
 );
-module.exports = mongoose.model('userProfile',userProfileSchema);
+module.exports = mongoose.model('UserProfile',userProfileSchema);

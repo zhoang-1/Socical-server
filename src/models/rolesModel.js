@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const roleSchema = mongoose.Schema(
     {
         roleName: {
-
+            type: String,
+            required: true,
         },
-        isDeleted:{
-
-        }
+        isDelete: {
+            type: Boolean,
+            default: false,
+            required: true,
+        },
     },
     { timestamps: true }
 );
-module.exports = mongoose.model('roles', roleSchema);
+module.exports = mongoose.model('Roles', roleSchema);

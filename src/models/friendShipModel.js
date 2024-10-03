@@ -3,26 +3,18 @@ const mongoose =require('mongoose')
 const orderStatus = {
     state: {
         type: String,
-        enum: ['PENDING', 'PACKAGE', 'DELIVERING', 'COMPLETE', 'CANCEL'],
+        enum: ['PENDING', 'ACCEPTED', 'REJECTED'],
         required: true,
     },
     pendingDate: {
         type: Date,
         required: true,
     },
-    packageDate: {
+    acceptedDate: {
         type: Date,
         required: true,
     },
-    deliveringDate: {
-        type: Date,
-        required: true,
-    },
-    completeDate: {
-        type: Date,
-        required: true,
-    },
-    cancelDate: {
+    rejectedDate: {
         type: Date,
         required: true,
     },
@@ -32,12 +24,12 @@ const friendShipSchema = mongoose.Schema(
     {
         profile_require_id:{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'userProfile',
+            ref: 'UserProfile',
             require: true
         },
         profile_accept_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'userProfile',
+            ref: 'UserProfile',
             require: true
         },
         status:{
@@ -47,4 +39,4 @@ const friendShipSchema = mongoose.Schema(
     },
     { timestamps: true }
 );
-module.exports = mongoose.model('friendShip', friendShipSchema)
+module.exports = mongoose.model('FriendShip', friendShipSchema)

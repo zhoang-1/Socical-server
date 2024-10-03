@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const userPostSchema = mongoose.Schema(
+const groupSchema = mongoose.Schema(
     {
         profile_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'userProfile',
+            ref: 'UserProfile',
             require: true
         },
         group_name: {
@@ -12,22 +12,24 @@ const userPostSchema = mongoose.Schema(
             required: true,
         },
         group_rules: {
-
+            type: String,
+            required: true,
         },
         group_content: {
             type: String,
             required: true,
         },
-        publishedAt: {
-
-        },
-        isDeleted:{
-
+        isDelete: {
+            type: Boolean,
+            default: false,
+            required: true,
         },
         idPublic:{
-
+            type: Boolean,
+            default: false,
+            required: true,
         },
     },
     { timestamps: true }
 );
-module.exports = mongoose.model('userPost', userPostSchema);
+module.exports = mongoose.model('Group', groupSchema);
