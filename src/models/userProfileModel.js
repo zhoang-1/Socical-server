@@ -5,79 +5,74 @@ const userProfileSchema = mongoose.Schema(
         first_name:{
             type: String,
             required: true,
+            default: ''
         },
         last_name:{
             type: String,
             required: true,
+            default: ''
         },
         email:{
             type: String,
             required: true,
+            default: ''
         },
         password: {
             type: String,
+            default: ''
         },
         phone: {
             type: String,
-            required: false,
-            default: '',
+            default: ''
         },
         address: {
             type: Object,
-            required: false,
-            default: {},
+            default: {}
         },
         date_of_birth:{
             type: Date,
-            required: true,
+            require:true
         },
         sex: {
             type: String,
-            required: false,
-            default: '',
+            default: ''
         },
         signup_date:{
             type: Date,
-            required: true,
+            default: Date.now
         },
         profile_picture: {
             type: String,
-            required: true,
+            default: ''
         },
         cover_picture:{
             type: String,
-            required: true,
+            default: ''
         },
         num_post: {
             type: Number,
-            required: true,
+            default: 0
         },
         num_follow:{
             type: Number,
-            required: true,
+            default: 0
         },
         num_like: {
             type: Number,
-            required: true,
+            default: 0
         },
-        friend_array: {
-            type: Array,
-            required: true,
-        },
+        friend_array: [{ type: Object, ref: 'UserProfile' }],
         is_friend:{
             type: String,
-            default: false,
-            required: true,
+            default: 'false'
         },
         isDelete: {
             type: Boolean,
-            default: false,
-            required: true,
+            default: false
         },
         role: {
             type: String,
-            default: 'user',
-            required: true,
+            default: 'user'
         },
     },
     { timestamps: true }

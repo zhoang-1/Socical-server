@@ -11,7 +11,6 @@ const messageThreadSchema = mongoose.Schema(
             default: false,
             required: true,
         },
-        
     },
     { timestamps: true }
 );

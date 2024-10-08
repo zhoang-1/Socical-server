@@ -12,7 +12,6 @@ const messageParticipantSchema = mongoose.Schema(
             ref: 'UserProfile',
             require: true
         },
-        
     },
     { timestamps: true }
 );

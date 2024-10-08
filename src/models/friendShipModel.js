@@ -3,21 +3,39 @@ const mongoose =require('mongoose')
 const orderStatus = {
     state: {
         type: String,
-        enum: ['PENDING', 'ACCEPTED', 'REJECTED'],
+        enum: ['PENDING', 'ACCEPTED', 'REJECTED', 'UNFRIEND', 'FOLLOW', 'UNFOLLOW'],
         required: true,
     },
     pendingDate: {
         type: Date,
-        required: true,
+        required: false, // Không bắt buộc
+        default: null, // Giá trị mặc định
     },
     acceptedDate: {
         type: Date,
-        required: true,
+        required: false, // Không bắt buộc
+        default: null, // Giá trị mặc định
     },
     rejectedDate: {
         type: Date,
-        required: true,
+        required: false, // Không bắt buộc
+        default: null, // Giá trị mặc định
     },
+    unfriendDate:{
+        type: Date,
+        required: false, // Không bắt buộc
+        default: null, // Giá trị mặc định
+    },
+    followDate:{
+        type: Date,
+        required: false, // Không bắt buộc
+        default: null, // Giá trị mặc định
+    },
+    unfollowDate:{
+        type: Date,
+        required: false, // Không bắt buộc
+        default: null, // Giá trị mặc định
+    }
 };
 
 const friendShipSchema = mongoose.Schema(
@@ -35,6 +53,10 @@ const friendShipSchema = mongoose.Schema(
         status:{
             type: orderStatus,
             required: true,
+        },
+        isActive: {
+            type: Boolean,
+            default: true, // Có thể được cập nhật thành false khi bị từ chối
         }
     },
     { timestamps: true }
