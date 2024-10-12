@@ -3,7 +3,7 @@ const mongoose =require('mongoose')
 const orderStatus = {
     state: {
         type: String,
-        enum: ['PENDING', 'ACCEPTED', 'REJECTED', 'UNFRIEND', 'FOLLOW', 'UNFOLLOW'],
+        enum: ['PENDING', 'ACCEPTED', 'REJECTED', 'UNFRIEND', 'BLOCK', 'UNBLOCK'],
         required: true,
     },
     pendingDate: {
@@ -21,22 +21,39 @@ const orderStatus = {
         required: false, // Không bắt buộc
         default: null, // Giá trị mặc định
     },
-    unfriendDate:{
+    unFriendDate:{
         type: Date,
         required: false, // Không bắt buộc
         default: null, // Giá trị mặc định
     },
-    followDate:{
+    blockDate:{
         type: Date,
         required: false, // Không bắt buộc
         default: null, // Giá trị mặc định
     },
-    unfollowDate:{
+    unBlockDate: {
         type: Date,
-        required: false, // Không bắt buộc
-        default: null, // Giá trị mặc định
+        require: false,
+        default: null
     }
 };
+// const orderFollowStatus = {
+//     state: {
+//         type: String,
+//         enum: ['FOLLOW', 'UNFOLLOW'],
+//         required: true,
+//     },
+//     followDate:{
+//         type: Date,
+//         required: false, // Không bắt buộc
+//         default: null, // Giá trị mặc định
+//     },
+//     unFollowDate:{
+//         type: Date,
+//         required: false, // Không bắt buộc
+//         default: null, // Giá trị mặc định
+//     }
+// };
 
 const friendShipSchema = mongoose.Schema(
     {
@@ -54,10 +71,18 @@ const friendShipSchema = mongoose.Schema(
             type: orderStatus,
             required: true,
         },
+        // followStatus: {
+        //     type:orderFollowStatus,
+        //     require:true
+        // },
         isActive: {
             type: Boolean,
             default: true, // Có thể được cập nhật thành false khi bị từ chối
-        }
+        },
+        // isFollowActive:{
+        //     type: Boolean,
+        //     default: true
+        // }
     },
     { timestamps: true }
 );

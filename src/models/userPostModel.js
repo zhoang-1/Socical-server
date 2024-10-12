@@ -29,6 +29,10 @@ const userPostSchema = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Roles',
             require: true
+        },
+        views: {
+            type: Number,
+            default: 0, // Số lượt xem bắt đầu từ 0
         }
     },
     { timestamps: true }

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/userProfileModel');
 const UserPost = require('../models/userPostModel');
+const checkPermissions = require('../middleware/checkPermissions');
 const mongoose = require('mongoose');
 //hiển thị bài post theo userId
 router.get('/v1/:id', async (req, res) => {
@@ -19,6 +20,28 @@ router.get('/v1/:id', async (req, res) => {
         res.status(200).json({ data: userPosts, message: 'Success', status: 200 });
     } catch (error) {
         res.status(500).json({ data: {}, message: error.message, status: 500 });
+    }
+});
+
+// Giả sử bạn có một route để lấy bài đăng theo ID
+router.get('/v1/view/:id',checkPermissions, async (req, res) => {
+    try {
+        const postId = req.params.id;
+        
+        // Tìm bài đăng theo ID
+        const post = await UserPost.findById(postId);
+        if (!post) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        // Tăng số lượt xem lên 1
+        post.views += 1;
+        await post.save(); // Lưu lại vào database
+
+        // Trả về bài đăng và số lượt xem mới
+        res.json(post);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching post' });
     }
 });
 

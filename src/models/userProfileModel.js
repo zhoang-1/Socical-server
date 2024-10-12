@@ -1,80 +1,91 @@
-const mongoose =require('mongoose')
+const mongoose = require('mongoose');
 
+// You can define an address schema if you want structured data for addresses
+const addressSchema = mongoose.Schema({
+    street: { type: String, default: '' },
+    city: { type: String, default: '' },
+    state: { type: String, default: '' },
+    zip: { type: String, default: '' },
+    country: { type: String, default: '' },
+});
 const userProfileSchema = mongoose.Schema(
     {
-        first_name:{
+        first_name: {
             type: String,
             required: true,
-            default: ''
+            default: '',
         },
-        last_name:{
+        last_name: {
             type: String,
             required: true,
-            default: ''
+            default: '',
         },
-        email:{
+        username: {
+            type: String,
+            require: true,
+        },
+        email: {
             type: String,
             required: true,
-            default: ''
+            default: '',
         },
         password: {
             type: String,
-            default: ''
+            default: '',
         },
         phone: {
             type: String,
-            default: ''
+            default: '',
         },
         address: {
-            type: Object,
-            default: {}
+            type: addressSchema,
+            default: {},
         },
-        date_of_birth:{
+        date_of_birth: {
             type: Date,
-            require:true
+            require: true,
         },
         sex: {
             type: String,
-            default: ''
+            default: '',
         },
-        signup_date:{
+        signup_date: {
             type: Date,
-            default: Date.now
+            default: Date.now,
         },
         profile_picture: {
             type: String,
-            default: ''
+            default: '',
         },
-        cover_picture:{
+        cover_picture: {
             type: String,
-            default: ''
+            default: '',
         },
         num_post: {
             type: Number,
-            default: 0
+            default: 0,
         },
-        num_follow:{
+        num_follow: {
             type: Number,
-            default: 0
+            default: 0,
         },
         num_like: {
             type: Number,
-            default: 0
+            default: 0,
         },
         friend_array: [{ type: Object, ref: 'UserProfile' }],
-        is_friend:{
-            type: String,
-            default: 'false'
-        },
+        follow_array: [{ type: Object, ref: 'UserProfile' }],
+        blockUser_array: [{ type: Object, ref: 'UserProfile' }],
         isDelete: {
             type: Boolean,
-            default: false
+            default: false,
         },
         role: {
             type: String,
-            default: 'user'
+            enum: ['User', 'Admin', 'Moderator', 'View'], // Using enum for role field
+            default: 'User',
         },
     },
     { timestamps: true }
 );
-module.exports = mongoose.model('UserProfile',userProfileSchema);
+module.exports = mongoose.model('UserProfile', userProfileSchema);
