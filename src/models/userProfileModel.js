@@ -1,3 +1,4 @@
+const { verify } = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 // You can define an address schema if you want structured data for addresses
@@ -76,6 +77,10 @@ const userProfileSchema = mongoose.Schema(
         friend_array: [{ type: Object, ref: 'UserProfile' }],
         follow_array: [{ type: Object, ref: 'UserProfile' }],
         blockUser_array: [{ type: Object, ref: 'UserProfile' }],
+        isVerify: {
+            type: Boolean,
+            default: false,
+        },
         isDelete: {
             type: Boolean,
             default: false,
