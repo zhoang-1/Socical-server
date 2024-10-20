@@ -2,10 +2,29 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/userProfileModel');
 const UserPost = require('../models/userPostModel');
+const FriendShip = require('../models/friendShipModel');
 const checkPermissions = require('../middleware/checkPermissions');
 const mongoose = require('mongoose');
+
+
+// hiển thị tất cả bài viết
+router.get('/v1/viewPost', async (req, res) => {
+    try {
+        const AllPost = await UserPost.find({isDelete: false})
+        .populate('profile_id', 'first_name last_name');
+        // lấy thông tin ở bảng User viết kèm tên người dùng
+        if (!AllPost || AllPost.length === 0) {
+            return res.status(404).json({ data: {}, message: 'User post not found', status: 404 });
+        } 
+        
+
+        res.status(200).json({ data: AllPost, message: 'Success', status: 200 });
+    } catch (error) {
+        res.status(500).json({ data: {}, message: error.message, status: 500 });
+    }
+});
 //hiển thị bài post theo userId
-router.get('/v1/:id', async (req, res) => {
+router.get('/v1/viewPost/:id', async (req, res) => {
     const profile_id = req.params.id; // Correctly get userId from URL params
     try {
         // Find the user by ID
@@ -13,7 +32,6 @@ router.get('/v1/:id', async (req, res) => {
         if (!userPosts) {
             return res.status(404).json({ data: {}, message: 'User post not found', status: 404 });
         }
-        // Destructure other user data and return the response
         if (!userPosts || userPosts.length === 0) {
             return res.status(404).json({ data: {}, message: 'User posts not found', status: 404 });
         }
@@ -24,10 +42,10 @@ router.get('/v1/:id', async (req, res) => {
 });
 
 // Giả sử bạn có một route để lấy bài đăng theo ID
-router.get('/v1/view/:id',checkPermissions, async (req, res) => {
+router.get('/v1/viewPost/:id', checkPermissions, async (req, res) => {
     try {
         const postId = req.params.id;
-        
+
         // Tìm bài đăng theo ID
         const post = await UserPost.findById(postId);
         if (!post) {
@@ -45,7 +63,7 @@ router.get('/v1/view/:id',checkPermissions, async (req, res) => {
     }
 });
 
-router.post('/v1', async (req, res) => {
+router.post('/v1/post', async (req, res) => {
     const userId = req.body;
     try {
         // Chuyển đổi ngày sinh từ chuỗi sang Date nếu cần thiết
@@ -80,8 +98,8 @@ router.put('/v1/:profile_id/:post_id', async (req, res) => {
     const { profile_id, post_id } = req.params;
     try {
         // Check if any posts were updated
-        console.log(profile_id)
-        if(!profile_id){
+        console.log(profile_id);
+        if (!profile_id) {
             return res.status(404).json({ data: {}, message: 'Not found User', status: 404 });
         }
         let result = await UserPost.findByIdAndUpdate(
@@ -106,7 +124,7 @@ router.delete('/v1/:profile_id/:post_id', async (req, res) => {
     try {
         // Check if any posts were updated
         // console.log(profile_id)
-        if(!profile_id){
+        if (!profile_id) {
             return res.status(404).json({ data: {}, message: 'Not found User', status: 404 });
         }
         let result = await UserPost.findByIdAndUpdate(

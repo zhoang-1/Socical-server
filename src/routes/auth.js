@@ -71,57 +71,57 @@ router.post('/signup', async (req, res) => {
             date_of_birth: req.body.date_of_birth,
             isVerify: true,
         });
-        // if (first_name == '' || last_name == '' || username == '' || email == '' || password == '',
-        //     date_of_birth == '')
-        //  {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Empty input fields!',
-        //         status: 400,
-        //     });
-        // } else if (!/^[a-zA-z ]*/.test(first_name)) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Invalid fist name enter!',
-        //         status: 400,
-        //     });
-        // } else if (!/^[a-zA-z ]*/.test(last_name)) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Invalid last name enter!',
-        //         status: 400,
-        //     });
-        // } else if (!/^[a-zA-z ]*/.test(username)) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Invalid username enter!',
-        //         status: 400,
-        //     });
-        // } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Invalid email enter!',
-        //         status: 400,
-        //     });
-        // } else if (!new Date(date_of_birth).getTime()) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Invalid day of birth enter!',
-        //         status: 400,
-        //     });
-        // } else if (!/^[a-zA-z ]*/.test(password)) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Invalid password enter!',
-        //         status: 400,
-        //     });
-        // } else if (password.length < 6) {
-        //     res.status(400).json({
-        //         data: {},
-        //         message: 'Password must be at least 6 characters !',
-        //         status: 400,
-        //     });
-        // }
+        if (first_name == '' || last_name == '' || username == '' || email == '' || password == '',
+            date_of_birth == '')
+         {
+            res.status(400).json({
+                data: {},
+                message: 'Empty input fields!',
+                status: 400,
+            });
+        } else if (!/^[a-zA-z ]*/.test(first_name)) {
+            res.status(400).json({
+                data: {},
+                message: 'Invalid fist name enter!',
+                status: 400,
+            });
+        } else if (!/^[a-zA-z ]*/.test(last_name)) {
+            res.status(400).json({
+                data: {},
+                message: 'Invalid last name enter!',
+                status: 400,
+            });
+        } else if (!/^[a-zA-z ]*/.test(username)) {
+            res.status(400).json({
+                data: {},
+                message: 'Invalid username enter!',
+                status: 400,
+            });
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            res.status(400).json({
+                data: {},
+                message: 'Invalid email enter!',
+                status: 400,
+            });
+        } else if (!new Date(date_of_birth).getTime()) {
+            res.status(400).json({
+                data: {},
+                message: 'Invalid day of birth enter!',
+                status: 400,
+            });
+        } else if (!/^[a-zA-z ]*/.test(password)) {
+            res.status(400).json({
+                data: {},
+                message: 'Invalid password enter!',
+                status: 400,
+            });
+        } else if (password.length < 6) {
+            res.status(400).json({
+                data: {},
+                message: 'Password must be at least 6 characters !',
+                status: 400,
+            });
+        }
         const user = await newUser.save();
 
         await emailService.sendEmail(user._id, user.email, 'Verify Email');

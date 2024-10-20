@@ -10,6 +10,10 @@ const userPostSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        images: {
+            type: String,
+            default: '',
+        },
         profile_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'UserProfile',
