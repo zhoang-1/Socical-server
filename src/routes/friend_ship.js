@@ -507,7 +507,7 @@ router.put('/v1/unblock/:accept_id/:require_id', async (req, res) => {
     }
 });
 
-
+module.exports = router;
 // POST - create a new follow 
 // router.post('/v1/follow', async (req, res) => {
 //     const { profile_accept_id, profile_require_id } = req.body; // ID của người nhận yêu cầu
@@ -668,4 +668,4 @@ router.put('/v1/unblock/:accept_id/:require_id', async (req, res) => {
 // });
 
 
-module.exports = router;
+

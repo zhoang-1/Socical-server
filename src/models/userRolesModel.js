@@ -5,6 +5,7 @@ const userRoleSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    description: { type: String },
     roleId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Roles',

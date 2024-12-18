@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const User = require('../models/userProfileModel');
 const emailService = require('../utils/emailService');
+const { route } = require('./friend_ship');
 
 //verifiOTP
 router.post('/verify-otp', async (req, res) => {
@@ -71,57 +72,7 @@ router.post('/signup', async (req, res) => {
             date_of_birth: req.body.date_of_birth,
             isVerify: true,
         });
-        if (first_name == '' || last_name == '' || username == '' || email == '' || password == '',
-            date_of_birth == '')
-         {
-            res.status(400).json({
-                data: {},
-                message: 'Empty input fields!',
-                status: 400,
-            });
-        } else if (!/^[a-zA-z ]*/.test(first_name)) {
-            res.status(400).json({
-                data: {},
-                message: 'Invalid fist name enter!',
-                status: 400,
-            });
-        } else if (!/^[a-zA-z ]*/.test(last_name)) {
-            res.status(400).json({
-                data: {},
-                message: 'Invalid last name enter!',
-                status: 400,
-            });
-        } else if (!/^[a-zA-z ]*/.test(username)) {
-            res.status(400).json({
-                data: {},
-                message: 'Invalid username enter!',
-                status: 400,
-            });
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            res.status(400).json({
-                data: {},
-                message: 'Invalid email enter!',
-                status: 400,
-            });
-        } else if (!new Date(date_of_birth).getTime()) {
-            res.status(400).json({
-                data: {},
-                message: 'Invalid day of birth enter!',
-                status: 400,
-            });
-        } else if (!/^[a-zA-z ]*/.test(password)) {
-            res.status(400).json({
-                data: {},
-                message: 'Invalid password enter!',
-                status: 400,
-            });
-        } else if (password.length < 6) {
-            res.status(400).json({
-                data: {},
-                message: 'Password must be at least 6 characters !',
-                status: 400,
-            });
-        }
+        
         const user = await newUser.save();
 
         await emailService.sendEmail(user._id, user.email, 'Verify Email');
@@ -155,12 +106,6 @@ router.post('/login', async (req, res) => {
                 message: 'Your account is restricted mode',
                 status: 406,
             });
-        } else if (user.isVerify) {
-            res.status(406).json({
-                data: {},
-                message: 'Your account not verify',
-                status: 406,
-            });
         } else {
             const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SECRET);
             const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
@@ -180,7 +125,7 @@ router.post('/login', async (req, res) => {
                     process.env.JWT_SECRET,
                     { expiresIn: '3d' }
                 );
-                res.status(201).json({ data: { token: accessToken }, message: 'login Success', status: 201 });
+                res.status(200).json({ data: { token: accessToken }, message: 'login Success', status: 200 });
             }
         }
     } catch (err) {
@@ -202,7 +147,7 @@ router.post('/forgotPassword', async (req, res) => {
             });
         } else {
             const forgotPassword = true;
-            await emailService.verifyOTP(user._id, user.email, 'Verify Email Forgot Password', forgotPassword);
+            await emailService.sendEmail(user._id, user.email, 'Verify Email Forgot Password', forgotPassword);
             res.status(200).json({ data: { userId: user._id }, message: 'Please verify email', status: 200 });
         }
     } catch (err) {
@@ -243,4 +188,56 @@ router.post('/verify-forgotPassword', async (req, res) => {
         res.status(500).json({ data: {}, message: err.message, status: 500 });
     }
 });
+
 module.exports = router;
+// if (first_name == '' || last_name == '' || username == '' || email == '' || password == '',
+        //     date_of_birth == '')
+        //  {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Empty input fields!',
+        //         status: 400,
+        //     });
+        // } else if (!/^[a-zA-z ]*/.test(first_name)) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Invalid fist name enter!',
+        //         status: 400,
+        //     });
+        // } else if (!/^[a-zA-z ]*/.test(last_name)) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Invalid last name enter!',
+        //         status: 400,
+        //     });
+        // } else if (!/^[a-zA-z ]*/.test(username)) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Invalid username enter!',
+        //         status: 400,
+        //     });
+        // } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Invalid email enter!',
+        //         status: 400,
+        //     });
+        // } else if (!new Date(date_of_birth).getTime()) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Invalid day of birth enter!',
+        //         status: 400,
+        //     });
+        // } else if (!/^[a-zA-z ]*/.test(password)) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Invalid password enter!',
+        //         status: 400,
+        //     });
+        // } else if (password.length < 6) {
+        //     res.status(400).json({
+        //         data: {},
+        //         message: 'Password must be at least 6 characters !',
+        //         status: 400,
+        //     });
+        // }

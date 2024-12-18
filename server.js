@@ -15,8 +15,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/auth', auth);
-app.use('/profile', userProfile);
-app.use('/userpost', userPost);
-app.use('/friendship', friendship);
+app.use('/api/auth', auth);
+app.use('/api/profile', userProfile);
+app.use('/api/userpost', userPost);
+app.use('/api/friendship', friendship);
 app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));

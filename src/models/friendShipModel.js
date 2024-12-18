@@ -8,28 +8,28 @@ const orderStatus = {
     },
     pendingDate: {
         type: Date,
-        required: false, // Không bắt buộc
-        default: null, // Giá trị mặc định
+        required: false, 
+        default: null, 
     },
     acceptedDate: {
         type: Date,
-        required: false, // Không bắt buộc
-        default: null, // Giá trị mặc định
+        required: false, 
+        default: null, 
     },
     rejectedDate: {
         type: Date,
-        required: false, // Không bắt buộc
-        default: null, // Giá trị mặc định
+        required: false, 
+        default: null, 
     },
     unFriendDate:{
         type: Date,
-        required: false, // Không bắt buộc
-        default: null, // Giá trị mặc định
+        required: false, 
+        default: null, 
     },
     blockDate:{
         type: Date,
-        required: false, // Không bắt buộc
-        default: null, // Giá trị mặc định
+        required: false, 
+        default: null, 
     },
     unBlockDate: {
         type: Date,
@@ -37,23 +37,6 @@ const orderStatus = {
         default: null
     }
 };
-// const orderFollowStatus = {
-//     state: {
-//         type: String,
-//         enum: ['FOLLOW', 'UNFOLLOW'],
-//         required: true,
-//     },
-//     followDate:{
-//         type: Date,
-//         required: false, // Không bắt buộc
-//         default: null, // Giá trị mặc định
-//     },
-//     unFollowDate:{
-//         type: Date,
-//         required: false, // Không bắt buộc
-//         default: null, // Giá trị mặc định
-//     }
-// };
 
 const friendShipSchema = mongoose.Schema(
     {
@@ -71,18 +54,10 @@ const friendShipSchema = mongoose.Schema(
             type: orderStatus,
             required: true,
         },
-        // followStatus: {
-        //     type:orderFollowStatus,
-        //     require:true
-        // },
         isActive: {
             type: Boolean,
-            default: true, // Có thể được cập nhật thành false khi bị từ chối
+            default: true, 
         },
-        // isFollowActive:{
-        //     type: Boolean,
-        //     default: true
-        // }
     },
     { timestamps: true }
 );

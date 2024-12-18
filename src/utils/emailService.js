@@ -51,7 +51,7 @@ class emailService {
             console.log('OTP Created At:', Date.now(), 'Expires At:', storedOtpData.expiresAt);
             // Check expiration
             const expiresAts = storedOtpData.expiresAt; 
-            if ( expiresAts < Date.now()) {
+            if (Date.now() > expiresAts  ) {
                 return { success: false, message: 'OTP has expired.' };
             }
 
