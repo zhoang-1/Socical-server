@@ -9,34 +9,7 @@ const addressSchema = mongoose.Schema({
     zip: { type: String, default: '' },
     country: { type: String, default: '' },
 });
-const userRights = {
-    state: {
-        type: String,
-        enum: ['USER', 'MODERATORGROUP', 'ADMINGROUP', 'VIEWER'],
-        required: true,
-        default: 'VIEWER', 
-    },
-    userDate: {
-        type: Date,
-        required: false, 
-        default: null, 
-    },
-    ModeratorGroupDate: {
-        type: Date,
-        required: false, 
-        default: null, 
-    },
-    AdminGroupDate: {
-        type: Date,
-        required: false, 
-        default: null, 
-    },
-    viewerDate:{
-        type: Date,
-        required: false, 
-        default: null, 
-    }
-};
+
 const userProfileSchema = mongoose.Schema(
     {
         first_name: {
@@ -114,7 +87,8 @@ const userProfileSchema = mongoose.Schema(
             default: false,
         },
         role: {
-            type: userRights,
+            type: String,
+            default: 'viewer',
             required: true,
         },
     },

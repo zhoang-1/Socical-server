@@ -10,21 +10,21 @@ const { route } = require('./friend_ship');
 
 //verifiOTP
 router.post('/verify-otp', async (req, res) => {
-    const { email, otp } = req.body;
+    const { userId, otp } = req.body;
     try {
-        if (!email || !otp) {
-            return res.status(400).json({ error: 'Vui lòng nhập email và OTP!' });
+        if (!userId || !otp) {
+            return res.status(400).json({ error: 'Vui lòng nhập userId và OTP!' });
         }
 
         // Xác thực OTP
-        const verifyResult = await emailService.verifyOTP(email, otp);
+        const verifyResult = await emailService.verifyOTP(userId, otp); // Use userId for OTP verification
         console.log('Verification Result:', verifyResult);
 
         if (verifyResult.success) {
-            await emailService.deleteOTP(email); // Xóa OTP sau khi xác thực thành công
+            await emailService.deleteOTP(userId); // Xóa OTP sau khi xác thực thành công
 
             // Update user verification status (make sure to specify the user)
-            const user = await User.findOne({ email });
+            const user = await User.findOne({ _id: userId }); // Find user by userId
             if (!user) {
                 return res.status(404).json({ error: 'Người dùng không tồn tại!' });
             }
@@ -70,7 +70,8 @@ router.post('/signup', async (req, res) => {
             // Mã hóa mật khẩu bằng CryptoJS và lưu trữ dưới dạng chuỗi
             password: CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SECRET).toString(),
             date_of_birth: req.body.date_of_birth,
-            isVerify: true,
+            sex: req.body.sex,
+            isVerify: false,
         });
         
         const user = await newUser.save();
@@ -110,6 +111,7 @@ router.post('/login', async (req, res) => {
             const hashedPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SECRET);
             const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
             const inputPassword = req.body.password;
+            const role = user.role ? 'user' : 'viewer';
             if (originalPassword != inputPassword) {
                 res.status(401).json({
                     data: {},
@@ -120,7 +122,7 @@ router.post('/login', async (req, res) => {
                 const accessToken = jwt.sign(
                     {
                         id: user._id,
-                        role: user.role,
+                        role: role,
                     },
                     process.env.JWT_SECRET,
                     { expiresIn: '3d' }

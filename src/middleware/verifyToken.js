@@ -1,43 +1,50 @@
 const jwt = require('jsonwebtoken');
 
-// Middleware to protect routes
-const authenticateJWT = (req, res, next) => {
-    const token = req.headers.authorization?.split(' ')[1];
-
-    if (!token) {
-        return res.status(401).json({ message: 'Access Denied. No token provided.' });
-    }
-
-    try {
-        // Verify the token
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded; // Attach decoded user data to the request object
-        next(); // Proceed to the next middleware or route handler
-    } catch (error) {
-        res.status(401).json({ message: 'Invalid or expired token.' });
-    }
+const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization; // Lấy token từ tiêu đề yêu cầu HTTP
+  if (authHeader) { // Nếu có token
+      const token = authHeader.split(' ')[1]; // Loại bỏ từ 'Bearer ' nếu có
+      jwt.verify(token, process.env.JWT_SECRET, (err, user) => { // Xác minh token
+          if (err) { // Token không hợp lệ
+              res.status(403).json({ data: {}, message: 'Token is not valid!', status: 403 });
+          } else { // Token hợp lệ
+              req.user = user; // Gán thông tin người dùng vào request
+              next(); // Chuyển tiếp sang middleware tiếp theo
+          }
+      });
+  } else { // Không có token
+      return res.status(401).json('You are not authenticated!');
+  }
 };
 
-module.exports = authenticateJWT;
-// const jwt = require('jsonwebtoken');
+const verifyTokenAndAuthorization = (req, res, next) => {
+  verifyToken(req, res, () => { // Đầu tiên xác thực token
+      if (req.user.role === 'user' || req.user.role === 'admin' || req.user.role === 'viewer') {
+          next(); // Nếu vai trò hợp lệ, tiếp tục
+      } else { // Nếu không, từ chối quyền
+          res.status(403).json({ data: {}, message: 'You are not alowed to do that!', status: 403 });
+      }
+  });
+};
 
-// const verifyToken = (req, res, next) => {
-//     const token = req.headers['authorization']?.split(' ')[1]; // Assuming Bearer token
+const verifyTokenAndAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {
+      if (req.user.role === 'admin' || req.user.role === 'user') {
+          next(); 
+      } else {
+          res.status(403).json({ data: {}, message: 'You are not alowed to do that!', status: 403 });
+      }
+  });
+};
 
-//     if (!token) {
-//         return res.status(403).json({ message: 'Token is required for authentication' });
-//     }
+const verifyTokenAndAdminOnly = (req, res, next) => {
+  verifyToken(req, res, () => {
+      if (req.user.role === 'admin') { // Chỉ admin mới được phép
+          next();
+      } else {
+          res.status(403).json({ data: {}, message: 'You are not alowed to do that!', status: 403 });
+      }
+  });
+};
 
-//     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//         if (err) {
-//             return res.status(401).json({ message: 'Token is not valid or has expired' });
-//         }
-//         req.user = user; // Save user info to request for use in other routes
-//         next();
-//     });
-// };
-
-// // Use the middleware on protected routes
-// app.use('/protected-route', verifyToken, (req, res) => {
-//     res.json({ message: 'This is a protected route', user: req.user });
-// });
+module.exports = {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin, verifyTokenAndAdminOnly};

@@ -11,9 +11,14 @@ const friendship = require('./src/routes/friend_ship.js')
 connectDB();
 
 const app = express(); 
-
 app.use(cors());
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true, // allow subdomains
+  })
+);
 
 app.use('/api/auth', auth);
 app.use('/api/profile', userProfile);
