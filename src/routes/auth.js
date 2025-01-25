@@ -157,23 +157,23 @@ router.post('/forgotPassword', async (req, res) => {
     }
 });
 router.post('/verify-forgotPassword', async (req, res) => {
-    const { email, otp } = req.body;
+    const { userId, otp } = req.body;
     try {
-        if (!email || !otp) {
+        if (!userId || !otp) {
             return res.status(400).json({ error: 'Vui lòng nhập email và OTP cần cấp lại!' });
         }
 
         // Xác thực OTP
-        const verifyResult = await emailService.verifyOTP(email, otp);
+        const verifyResult = await emailService.verifyOTP(userId, otp);
         if (verifyResult.success) {
-            await emailService.deleteOTP(email); // Xóa OTP sau khi xác thực thành công
+            await emailService.deleteOTP(userId); // Xóa OTP sau khi xác thực thành công
 
-            const user = await User.findOne({ email }); // Fetch user info based on email
+            const user = await User.findOne({ userId }); // Fetch user info based on email
             if (!user) {
                 return res.status(404).json({ error: 'Người dùng không tồn tại!' });
             }
             await User.findByIdAndUpdate(
-                email,
+                userId,
                 {
                     $set: {
                         password: CryptoJS.AES.encrypt(req.body.password, process.env.PASS_SECRET).toString(),

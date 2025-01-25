@@ -37,6 +37,16 @@ const verifyTokenAndAdmin = (req, res, next) => {
   });
 };
 
+const verifyTokenAndUserOnly = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user.role === 'user') { // Chỉ admin mới được phép
+            next();
+        } else {
+            res.status(403).json({ data: {}, message: 'You are not alowed to do that!', status: 403 });
+        }
+    });
+  };
+
 const verifyTokenAndAdminOnly = (req, res, next) => {
   verifyToken(req, res, () => {
       if (req.user.role === 'admin') { // Chỉ admin mới được phép
@@ -47,4 +57,4 @@ const verifyTokenAndAdminOnly = (req, res, next) => {
   });
 };
 
-module.exports = {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin, verifyTokenAndAdminOnly};
+module.exports = {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin,verifyTokenAndUserOnly, verifyTokenAndAdminOnly};

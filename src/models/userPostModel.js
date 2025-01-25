@@ -2,16 +2,17 @@ const mongoose = require('mongoose');
 
 const userPostSchema = mongoose.Schema(
     {
-        title: {
-            type: String,
-            required: true,
-        },
+        
         contents: {
             type: String,
             required: true,
         },
         images: {
-            type: String,
+            type: [String], // Mảng lưu nhiều ảnh
+            default: [],
+        },
+        video: {
+            type: String, // Lưu video
             default: '',
         },
         profile_id: {
@@ -37,7 +38,19 @@ const userPostSchema = mongoose.Schema(
         views: {
             type: Number,
             default: 0, // Số lượt xem bắt đầu từ 0
-        }
+        },
+        likes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User',
+            },
+        ], // Lưu những người đã like bài viết
+        comments: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Comment',
+            },
+        ], // Lưu các bình luận của bài viết
     },
     { timestamps: true }
 );
